@@ -1,12 +1,18 @@
-import logo from './logo.svg';
 import AnimatedNumber from "react-animated-numbers";
 import React from "react";
+import Axios from "axios";
 import './App.css';
 
 function App() {
-  const [number, setNumber] = React.useState(1000);
+  const [portfolio, setPortfolio] = React.useState(0);
   
-  setInterval(() => setNumber(number + 1), 1000);
+  const [capital, setCapital] = React.useState(0);
+
+  const onCalculate = async () => {
+    const res = await Axios.get("http://localhost:3001/nasdaq/appl");
+    const dividend = res.data[0].cash_amount;
+    setPortfolio(capital * dividend * 180);
+  }
 
   return (
     <div className="App">
@@ -19,17 +25,19 @@ function App() {
           flexDirection: "column"
         }}
       >
-        <label htmlFor="value">Number Difference</label>
+        <label htmlFor="value">Your capital</label>
+        <input id="capital" type="number" placeholder="Enter capital" onChange={(e) => setCapital(e.target.value)}></input>
         <AnimatedNumber
           fontStyle={{ fontFamily: "Nunito", fontSize: 40 }}
-          animateToNumber={number}
+          animateToNumber={portfolio}
           includeComma
           transitions={(index) => ({type: "spring", duration: index})}
-          config={{ tension: 50, friction: 40 }}
+          config={{ tension: 90, friction: 40 }}
           onStart={() => console.log("onStart")}
           onFinish={() => console.log("onFinish")}
           animationType={"calm"}
         />
+        <button id="btnCalc" onClick={onCalculate}>Calculate</button>
         </div>
     </div>
   );

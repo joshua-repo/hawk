@@ -8,8 +8,13 @@ const APIConf = require("../api_config");
  * with /aggs/ticker/<ticker_name>
  */
 router.get('/appl', async (req, res, next) => {
-  const data = await axios.get(`${APIConf.api_domain}${APIConf.api_version_v3}/aggs/ticker/AAPL/range/1/day/2023-01-09/2023-01-09?apiKey=${APIConf.api_key}`);
-  res.json(data.data);
+  try {
+    const data = await axios.get(`${APIConf.api_domain_polygon}${APIConf.api_version_v3}/reference/dividends?ticker=AAPL&limit=1&apiKey=${APIConf.api_key_polygon}`);
+    res.json(data.data.results);
+  } catch(err) {
+    next();
+  }
+  
 });
 
 /** 

@@ -58,3 +58,12 @@ logs/
 # OS-specific
 .DS_Store
 Thumbs.db
+
+target/
+__pycache__/
+*.pyc
+*.pyo
+*.so
+*.egg-info/
+build/
+dist/

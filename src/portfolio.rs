@@ -64,11 +64,11 @@ impl Portfolio {
 	pub fn calculate_total_value(&self, prices: &PyDict) -> f64 {
 		let mut positions_value = 0.0;
 		for (symbol, qty) in &self.positions {
-			if let Some(price) = prices.get_item(symbol) {
-				if let Ok(price_f64) = price.extract::<f64>() {
-					positions_value += (*qty as f64) * price_f64;
-				}
-			}
+			if let Ok(Some(price)) = prices.get_item(symbol) {
+        if let Ok(price_f64) = price.extract::<f64>() {
+            positions_value += (*qty as f64) * price_f64;
+        }
+      }
 		}
 		self.cash + positions_value
 	}

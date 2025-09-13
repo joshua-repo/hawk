@@ -1,17 +1,37 @@
 [build-system]
-requires = ["maturin>=1.0"]
+requires = ["maturin>=1.4, <2.0"]
 build-backend = "maturin"
 
 [project]
 name = "hawk"
 version = "1.0.0"
-description = ""
+description = "High-performance trading engine with Rust backend"
 authors = [
     { name = "Your Name", email = "your@email.com" }
 ]
-requires-python = "==3.10"
+requires-python = ">=3.10"
 dependencies = [
-    "pandas",
-    "numpy",
-    "maturin>=1.9.4",
+    "pandas>=2.0.0,<3.0.0",  # Pandas 2.x series is stable and performant
+    "numpy>=1.24.0,<2.0.0",  # numpy 1.24+ works well with pandas 2.x
 ]
+
+[project.optional-dependencies]
+dev = [
+    "maturin>=1.9.4,<2.0.0",
+    "pytest>=7.0.0,<8.0.0",
+    "ruff>=0.1.0",
+]
+
+[tool.maturin]
+features = ["pyo3/extension-module"]
+python-source = "hawk"
+module-name = "hawk_core"  # Rust module will be named hawk_core
+
+[tool.black]
+line-length = 88
+target-version = ["py310"]
+
+[tool.ruff]
+line-length = 88
+target-version = "py310"
+select = ["E", "F", "B", "I"]

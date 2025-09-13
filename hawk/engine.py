@@ -1,6 +1,6 @@
 """Main backtesting engine"""
 
-from hawk_core import Portfolio
+from hawk.hawk_core import Portfolio
 import pandas as pd
 from typing import Dict, Any
 

@@ -1,6 +1,8 @@
 """Basic backtest example"""
 import os
-from hawk.engine import BacktestEngine, DataHandler
+
+from hawk.engine import BacktestEngine
+from hawk.data import DataHandler
 from hawk.strategy import SimpleMovingAverageStrategy
 
 def main():

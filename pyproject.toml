@@ -23,9 +23,11 @@ dev = [
 ]
 
 [tool.maturin]
+bindings = "pyo3"
 features = ["pyo3/extension-module"]
-python-source = "hawk"
-module-name = "hawk_core"  # Rust module will be named hawk_core
+module-name = "hawk.hawk_core"  # Rust module will be named hawk_core
+python-source = "."
+include = ["hawk/**/*"]  # Ensure all files in hawk directory are included
 
 [tool.black]
 line-length = 88

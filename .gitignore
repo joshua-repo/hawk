@@ -3,7 +3,6 @@
 
 # Python virtual environments
 .venv/
-venv/
 
 # Python cache and build artifacts
 __pycache__/

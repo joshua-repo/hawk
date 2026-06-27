@@ -3,23 +3,31 @@ set -euo pipefail
 
 echo "🔧 Setting up Hawk development environment..."
 
-# Check prerequisites
-command -v uv >/dev/null || { echo "❌ uv not found. Install: curl -LsSf https://astral.sh/uv/install.sh | sh"; exit 1; }
-command -v rustc >/dev/null || { echo "❌ Rust not found. Install: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"; exit 1; }
+check_tool() {
+    if ! hash "$1" 2>/dev/null; then
+        echo "❌ $2" >&2
+        exit 1
+    fi
+}
 
-echo "📦 Syncing dependencies..."
-uv sync
+check_tool rustc "Rust not found. Install: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+check_tool cargo "Cargo not found. Install Rust toolchain with rustup"
+check_tool python3 "python3 not found. Install Python 3.10+"
 
-echo "🦀 Building Hawk package..."
-uv pip install --upgrade maturin
-uv run maturin develop --release
+if [ ! -d ".venv" ]; then
+    echo "🐍 Creating Python virtual environment (.venv)..."
+    python3 -m venv .venv
+fi
 
-echo "🧪 Testing installation..."
-uv run python -c "
-import hawk
-import hawk.hawk_core
-print('✅ Hawk package:', hawk.__file__)
-print('✅ Rust extension:', hawk.hawk_core.__file__)
-"
+echo "📦 Upgrading Python packaging tooling..."
+.venv/bin/python -m ensurepip --upgrade >/dev/null 2>&1 || true
+.venv/bin/python -m pip install --upgrade pip setuptools wheel
+.venv/bin/python -m pip install --upgrade maturin
 
-echo "🚀 Done! Run example with: uv run python example/basic_backtest.py"
+echo "🦀 Building Hawk Rust extension..."
+.venv/bin/python -m maturin develop --release
+
+echo "🧪 Verifying installation..."
+.venv/bin/python -c "import hawk, hawk.hawk_core; print('✅ Hawk package:', hawk.__file__); print('✅ Rust extension:', hawk.hawk_core.__file__)"
+
+echo "🚀 Hawk is ready. Run an example with: .venv/bin/python example/simple_strategy.py"

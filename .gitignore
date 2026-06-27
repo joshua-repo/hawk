@@ -3,38 +3,12 @@
 
 # Python virtual environments
 .venv/
-venv/
 
 # Python cache and build artifacts
 __pycache__/
 *.pyc
 *.pyo
 *.pyd
-
-# C/C++ build artifacts
-build/
-dist/
-*.so
-*.dll
-*.dylib
-*.o
-*.obj
-*.a
-*.lib
-
-# Setuptools/packaging
-*.egg-info/
-.eggs/
-pip-wheel-metadata/
-*.manifest
-*.spec
-
-# CMake files
-CMakeFiles/
-CMakeCache.txt
-cmake_install.cmake
-Makefile
-install_manifest.txt
 
 # Test, coverage, and profiling
 .coverage
@@ -58,3 +32,12 @@ logs/
 # OS-specific
 .DS_Store
 Thumbs.db
+
+target/
+__pycache__/
+*.pyc
+*.pyo
+*.so
+*.egg-info/
+build/
+dist/

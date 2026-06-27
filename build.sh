@@ -1,25 +1,33 @@
-#!/bin/bash
-# Simple build script
+#!/usr/bin/env bash
+set -euo pipefail
 
-echo "🔨 Building Hawk Trading Engine (Minimal)"
+echo "🔧 Setting up Hawk development environment..."
 
-# Create build directory
-mkdir -p build
-cd build
+check_tool() {
+    if ! hash "$1" 2>/dev/null; then
+        echo "❌ $2" >&2
+        exit 1
+    fi
+}
 
-# Configure and build with debug symbols
-cmake -DCMAKE_BUILD_TYPE=Debug ..
-make -j4
+check_tool rustc "Rust not found. Install: curl --proto '=https' --tlsv1.2 -sSf https://sh.rustup.rs | sh"
+check_tool cargo "Cargo not found. Install Rust toolchain with rustup"
+check_tool python3 "python3 not found. Install Python 3.10+"
 
-# Build Python package
-cd ..
-pip install -e .
+if [ ! -d ".venv" ]; then
+    echo "🐍 Creating Python virtual environment (.venv)..."
+    python3 -m venv .venv
+fi
 
-echo "✅ Build complete! Try running:"
-echo "python examples/basic_backtest.py"
-echo ""
-echo "For debugging in VSCode:"
-echo "1. Set breakpoints in Python or C++ code"
-echo "2. Use F5 to start debugging"
-echo "3. Choose 'Python: Current File' for Python debugging"
-echo "4. Choose 'C++: Attach to Python' for mixed debugging"
+echo "📦 Upgrading Python packaging tooling..."
+.venv/bin/python -m ensurepip --upgrade >/dev/null 2>&1 || true
+.venv/bin/python -m pip install --upgrade pip setuptools wheel
+.venv/bin/python -m pip install --upgrade maturin
+
+echo "🦀 Building Hawk Rust extension..."
+.venv/bin/python -m maturin develop --release
+
+echo "🧪 Verifying installation..."
+.venv/bin/python -c "import hawk, hawk.hawk_core; print('✅ Hawk package:', hawk.__file__); print('✅ Rust extension:', hawk.hawk_core.__file__)"
+
+echo "🚀 Hawk is ready. Run an example with: .venv/bin/python example/simple_strategy.py"

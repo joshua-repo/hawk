@@ -1,10 +1,7 @@
 """Example of creating a custom strategy"""
 
-import sys
-import os
-sys.path.insert(0, os.path.join(os.path.dirname(__file__), '..', 'src', 'python'))
-
-from hawk import BacktestEngine, DataHandler
+from hawk.engine import BacktestEngine
+from hawk.data import DataHandler
 from hawk.strategy import BaseStrategy, SimpleMovingAverageStrategy
 
 class BuyAndHoldStrategy(BaseStrategy):
@@ -29,7 +26,8 @@ class BuyAndHoldStrategy(BaseStrategy):
 
 def main():
     # Generate data
-    data = DataHandler.generate_sample_data(days=100, initial_price=50.0)
+    data_handler = DataHandler()
+    data = data_handler.generate_sample_data(days=100, initial_price=50.0)
     
     # Compare strategies
     strategies = [
@@ -39,8 +37,13 @@ def main():
     
     for strategy in strategies:
         print(f"\n{'='*50}")
+        print(f"Testing strategy: {strategy.name}")
         engine = BacktestEngine(initial_cash=5000.0)
         results = engine.run_backtest(data, strategy, symbol="TEST")
+        
+        # Print results
+        print(f"Final value: ${results.get('final_value', 0):.2f}")
+        print(f"Total trades: {len(results.get('trades', []))}")
 
 if __name__ == "__main__":
     main()

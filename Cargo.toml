@@ -1,0 +1,13 @@
+[package]
+name = "hawk_core"
+version = "0.1.0"
+edition = "2021"
+license = "MIT"
+description = "Python extension module for hawk"
+
+[lib]
+name = "hawk_core"
+crate-type = ["cdylib"]
+
+[dependencies]
+pyo3 = { version = "0.29.0", features = ["extension-module"] }

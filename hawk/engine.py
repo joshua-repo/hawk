@@ -1,6 +1,6 @@
 """Main backtesting engine"""
 
-import hawk_core
+from hawk.hawk_core import Portfolio
 import pandas as pd
 from typing import Dict, Any
 
@@ -8,8 +8,7 @@ class BacktestEngine:
     """Simple backtesting engine for learning"""
     
     def __init__(self, initial_cash: float = 10000.0):
-        hawk_core.initialize()
-        self.portfolio = hawk_core.Portfolio(initial_cash)
+        self.portfolio = Portfolio(initial_cash)
         self.initial_cash = initial_cash
         
     def run_backtest(self, data: pd.DataFrame, strategy, symbol: str = "STOCK") -> Dict[str, Any]:

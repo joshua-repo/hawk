@@ -1,5 +1,5 @@
-from .engine import BacktestEngine
 from .data import DataHandler
+from .engine import BacktestEngine
 from .strategy import SimpleMovingAverageStrategy
 
 __all__ = [

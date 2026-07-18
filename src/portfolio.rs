@@ -39,20 +39,20 @@ impl Portfolio {
 
     pub fn execute_trade(
         &mut self,
-        timestamp: String,    // Keep String - stored in Trade
-        symbol: &str,        // Change to &str - only used for lookups
-        action: &str,        // Change to &str - only used for comparison
+        timestamp: String, // Keep String - stored in Trade
+        symbol: &str,      // Change to &str - only used for lookups
+        action: &str,      // Change to &str - only used for comparison
         quantity: i32,
         price: f64,
     ) -> bool {
         let trade = Trade::new(
             timestamp,
-            symbol.to_string(),  // Convert to String for storage
-            action.to_string(),  // Convert to String for storage
+            symbol.to_string(), // Convert to String for storage
+            action.to_string(), // Convert to String for storage
             quantity,
-            price
+            price,
         );
-        
+
         if action == "BUY" && self.can_buy(symbol, quantity, price) {
             self.cash -= trade.value;
             *self.positions.entry(symbol.to_string()).or_insert(0) += quantity;

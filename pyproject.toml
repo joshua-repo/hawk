@@ -15,11 +15,15 @@ dependencies = [
     "numpy>=1.24.0,<2.0.0",  # numpy 1.24+ works well with pandas 2.x
 ]
 
-[project.optional-dependencies]
+# PEP 735 dependency group: uv syncs the `dev` group by default (on both
+# `uv sync` and `uv run`), so these tools are never pruned -- unlike an
+# optional-dependencies extra, which `uv run` removes.
+[dependency-groups]
 dev = [
     "maturin>=1.9.4,<2.0.0",
     "pytest>=9.1.0,<10.0.0",
     "ruff>=0.1.0, <1.0.0",
+    "pre-commit>=3.5.0,<5.0.0",
 ]
 
 [tool.maturin]
@@ -36,4 +40,7 @@ target-version = ["py310"]
 [tool.ruff]
 line-length = 88
 target-version = "py310"
+
+[tool.ruff.lint]
 select = ["E", "F", "B", "I"]
+ignore = ["E501"]  # line length handled by the formatter

@@ -41,3 +41,14 @@ __pycache__/
 *.egg-info/
 build/
 dist/
+
+# LLM instruction / agent config -- local-only. CLAUDE.md holds private
+# research details (symbol, strategy rules, results); see its header. Keep
+# all assistant config out of the (showcase) repo.
+CLAUDE.md
+AGENTS.md
+.github/agents/
+.github/copilot-instructions.md
+.github/instructions/
+.cursor/
+.cursorrules
